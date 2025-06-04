@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentazione PCTO</title>
+  <link rel="icon" href="images/favicon/favicon.png" type="image/png">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden; /* Previene lo scroll orizzontale */
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      position: relative;
+      color: #333;
+    }
+    
+    /* Header e selettore lingua */
+    .header {
+      position: fixed; /* Cambiato da absolute a fixed per garantire che rimanga sempre visibile */
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 0; /* Ridotto da 15px a 10px */
+      background-color: rgba(255,255,255,0.95); /* Aumentato l'opacità per maggiore leggibilità */
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      z-index: 100; /* Aumentato per garantire che sia sempre sopra altri elementi */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header-title {
+      margin-left: 30px;
+      font-size: 1.4rem; /* Ridotto da 1.5rem a 1.4rem */
+      font-weight: 600;
+      color: #1f4068;
+    }
+    
+    .lang-switcher {
+      margin-right: 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background-color: rgba(255,255,255,0.8);
+      border-radius: 30px;
+      padding: 5px 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .lang-switcher:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .lang-switcher img {
+      width: 28px; /* Ridotto da 32px a 28px */
+      height: 28px; /* Ridotto da 32px a 28px */
+      border-radius: 50%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .lang-switcher button {
+      background: none;
+      border: none;
+      font-size: 0.9rem; /* Ridotto da 1rem a 0.9rem */
+      font-weight: 500;
+      cursor: pointer;
+      padding: 6px 10px; /* Ridotto da 8px 12px a 6px 10px */
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      color: #555;
+    }
+    
+    .lang-switcher button:hover {
+      background-color: rgba(31, 64, 104, 0.1);
+      color: #1f4068;
+    }
+    
+    .lang-switcher button.active {
+      background-color: #1f4068;
+      color: white;
+    }
+    
+    /* Container principale */
+    .slideshow-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding-top: 60px; /* Ridotto da 80px a 60px */
+      padding-bottom: 40px; /* Ridotto da 60px a 40px */
+      box-sizing: border-box;
+      overflow-x: hidden; /* Previene lo scroll orizzontale */
+    }
+    
+    /* Stile delle slide */
+    .slide {
+      display: none;
+      width: 100%;
+      height: auto; /* Cambiato da altezza fissa a auto per adattarsi al contenuto */
+      min-height: calc(100vh - 120px); /* Ridotto da 150px a 120px */
+      box-sizing: border-box;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem 12% 3rem 12%; /* Ridotto padding */
+      position: absolute;
+      top: 60px; /* Ridotto da 80px a 60px */
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-bottom: 40px; /* Ridotto da 60px a 40px */
+    }
+    
+    .slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+    
+    .slide h2 {
+      font-size: 2.2rem; /* Ridotto da 2.5rem a 2.2rem */
+      margin-bottom: 1.2rem; /* Ridotto da 1.5rem a 1.2rem */
+      color: #1f4068;
+      position: relative;
+      padding-bottom: 12px; /* Ridotto da 15px a 12px */
+    }
+    
+    .slide h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px; /* Ridotto da 80px a 70px */
+      height: 3px;
+      background-color: #3f72af;
+      border-radius: 3px;
+    }
+    
+    .slide p {
+      font-size: 1.2rem; /* Ridotto da 1.3rem a 1.2rem */
+      line-height: 1.5; /* Ridotto da 1.6 a 1.5 */
+      margin: 0.7rem 0; /* Ridotto da 0.8rem a 0.7rem */
+      color: #444;
+      max-width: 750px; /* Ridotto da 800px a 750px */
+    }
+    
+    .slide ul {
+      list-style: none;
+      padding-left: 0;
+      text-align: left;
+      max-width: 750px; /* Ridotto da 800px a 750px */
+      margin: 1.2rem auto; /* Ridotto da 1.5rem a 1.2rem */
+    }
+    
+    .slide ul li {
+      margin: 0.8rem 0; /* Ridotto da 1rem a 0.8rem */
+      position: relative;
+      padding-left: 1.8rem; /* Ridotto da 2rem a 1.8rem */
+      font-size: 1.1rem; /* Ridotto da 1.2rem a 1.1rem */
+      line-height: 1.4; /* Ridotto da 1.5 a 1.4 */
+    }
+    
+    .slide ul li::before {
+      content: "●";
+      color: #3f72af;
+      position: absolute;
+      left: 0;
+      font-size: 1.1rem; /* Ridotto da 1.2rem a 1.1rem */
+      line-height: 1.4rem; /* Ridotto da 1.5rem a 1.4rem */
+    }
+    
+    .slide-image {
+      max-width: 55%; /* Ridotto da 60% a 55% */
+      max-height: 35%; /* Ridotto da 40% a 35% */
+      margin-bottom: 1.5rem; /* Ridotto da 2rem a 1.5rem */
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      object-fit: contain; /* Cambiato da cover a contain per mantenere le proporzioni */
+    }
+    
+    .slide-image:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    /* Logo aziendale */
+    .company-logo {
+      max-width: 160px; /* Ridotto da 180px a 160px */
+      max-height: 50px; /* Ridotto da 60px a 50px */
+      position: absolute;
+      top: 15px; /* Ridotto da 20px a 15px */
+      right: 15px; /* Ridotto da 20px a 15px */
+      z-index: 3;
+      border-radius: 5px;
+      padding: 4px; /* Ridotto da 5px a 4px */
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Controlli navigazione */
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px; /* Ridotto da 60px a 50px */
+      height: 50px; /* Ridotto da 60px a 50px */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 22px; /* Ridotto da 24px a 22px */
+      background-color: rgba(31, 64, 104, 0.7);
+      border: none;
+      border-radius: 50%;
+      user-select: none;
+      transition: all 0.3s ease;
+      z-index: 5;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    .prev:hover, .next:hover {
+      background-color: rgba(31, 64, 104, 0.9);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      transform: translateY(-50%) scale(1.05);
+    }
+    
+    .prev { left: 25px; } /* Ridotto da 30px a 25px */
+    .next { right: 25px; } /* Ridotto da 30px a 25px */
+    
+    /* Indicatori di slide */
+    .dots-container {
+      position: absolute;
+      bottom: 50px; /* Ridotto da 70px a 50px */
+      width: 100%;
+      text-align: center;
+      z-index: 5;
+    }
+    
+    .dot {
+      cursor: pointer;
+      height: 10px; /* Ridotto da 12px a 10px */
+      width: 10px; /* Ridotto da 12px a 10px */
+      margin: 0 5px; /* Ridotto da 6px a 5px */
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .active-dot, .dot:hover {
+      background-color: #3f72af;
+      transform: scale(1.2);
+    }
+    
+    /* Footer */
+    .footer {
+      position: fixed; /* Cambiato da absolute a fixed per garantire che rimanga sempre visibile */
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 8px 0; /* Ridotto da 10px a 8px */
+      background-color: rgba(255,255,255,0.95); /* Aumentato l'opacità per maggiore leggibilità */
+      text-align: center;
+      font-size: 0.85rem; /* Ridotto da 0.9rem a 0.85rem */
+      color: #666;
+      z-index: 10;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05); /* Aggiunto ombra superiore */
+    }
+    
+    /* Responsive design */
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 1.2rem 8% 2.8rem 8%; /* Ridotto padding */
+      }
+      
+      .slide h2 {
+        font-size: 2rem; /* Ridotto da 2.2rem a 2rem */
+      }
+      
+      .slide p, .slide ul li {
+        font-size: 1rem; /* Ridotto da 1.1rem a 1rem */
+      }
+      
+      .slide-image {
+        max-width: 65%; /* Ridotto da 70% a 65% */
+        max-height: 32%; /* Ridotto da 35% a 32% */
+      }
+      
+      .company-logo {
+        max-width: 140px; /* Ridotto da 150px a 140px */
+        max-height: 45px; /* Ridotto da 50px a 45px */
+        top: 12px; /* Ridotto da 15px a 12px */
+        right: 12px; /* Ridotto da 15px a 12px */
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header {
+        padding: 8px 0; /* Ridotto da 10px a 8px */
+      }
+      
+      .slideshow-container {
+        padding-top: 55px; /* Ridotto da 70px a 55px */
+        padding-bottom: 40px; /* Ridotto da 50px a 40px */
+      }
+      
+      .slide {
+        padding: 0.8rem 4% 2.5rem 4%; /* Ridotto padding */
+        min-height: calc(100vh - 110px); /* Ridotto da 140px a 110px */
+        top: 55px; /* Ridotto da 70px a 55px */
+        margin-bottom: 40px; /* Ridotto da 50px a 40px */
+      }
+      
+      .header-title {
+        margin-left: 12px; /* Ridotto da 15px a 12px */
+        font-size: 1.2rem; /* Ridotto da 1.3rem a 1.2rem */
+      }
+      
+      .lang-switcher {
+        margin-right: 12px; /* Ridotto da 15px a 12px */
+        padding: 3px 8px; /* Ridotto da 3px 10px a 3px 8px */
+      }
+      
+      .lang-switcher img {
+        width: 24px; /* Ridotto da 28px a 24px */
+        height: 24px; /* Ridotto da 28px a 24px */
+      }
+      
+      .slide h2 {
+        font-size: 1.7rem; /* Ridotto da 1.8rem a 1.7rem */
+      }
+      
+      .slide p, .slide ul li {
+        font-size: 0.95rem; /* Ridotto da 1rem a 0.95rem */
+      }
+      
+      .slide-image {
+        max-width: 75%; /* Ridotto da 80% a 75% */
+        max-height: 28%; /* Ridotto da 30% a 28% */
+      }
+      
+      .company-logo {
+        max-width: 110px; /* Ridotto da 120px a 110px */
+        max-height: 35px; /* Ridotto da 40px a 35px */
+        top: 8px; /* Ridotto da 10px a 8px */
+        right: 8px; /* Ridotto da 10px a 8px */
+      }
+      
+      .prev, .next {
+        width: 45px; /* Ridotto da 50px a 45px */
+        height: 45px; /* Ridotto da 50px a 45px */
+        font-size: 18px; /* Ridotto da 20px a 18px */
+      }
+      
+      .prev { left: 12px; } /* Ridotto da 15px a 12px */
+      .next { right: 12px; } /* Ridotto da 15px a 12px */
+      
+      .dots-container {
+        bottom: 45px; /* Ridotto da 60px a 45px */
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-title {
+        font-size: 1rem; /* Ridotto da 1.1rem a 1rem */
+      }
+      
+      .slide h2 {
+        font-size: 1.5rem; /* Ridotto da 1.6rem a 1.5rem */
+      }
+      
+      .slide p, .slide ul li {
+        font-size: 0.9rem; /* Ridotto da 0.95rem a 0.9rem */
+      }
+      
+      .slide-image {
+        max-width: 85%; /* Ridotto da 90% a 85% */
+        max-height: 22%; /* Ridotto da 25% a 22% */
+      }
+      
+      .dots-container {
+        bottom: 40px; /* Ridotto da 55px a 40px */
+      }
+    }
+    
+    /* Animazioni */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .slide.active h2,
+    .slide.active p,
+    .slide.active ul,
+    .slide.active .slide-image,
+    .slide.active .company-logo {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+    
+    .slide.active .slide-image {
+      animation-delay: 0.2s;
+    }
+    
+    .slide.active h2 {
+      animation-delay: 0.4s;
+    }
+    
+    .slide.active p,
+    .slide.active ul {
+      animation-delay: 0.6s;
+    }
+    
+    .slide.active .company-logo {
+      animation-delay: 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">
+      <span class="lang-it">Percorsi per le Competenze Trasversali e l'Orientamento</span>
+      <span class="lang-en" style="display:none;">Transversal Skills and Orientation Paths</span>
+    </div>
+    <div class="lang-switcher">
+      <img src="images/it.png" alt="Italiano">
+      <button id="it-btn" class="active">Italiano</button>
+      <img src="images/en.png" alt="English">
+      <button id="en-btn">English</button>
+    </div>
+  </div>
+  
+  <div class="slideshow-container" id="slides"></div>
+  
+  <button class="prev" onclick="plusSlides(-1)">&#10094;</button>
+  <button class="next" onclick="plusSlides(1)">&#10095;</button>
+  
+  <div class="dots-container" id="dots"></div>
+  
+  <div class="footer">
+    <span class="lang-it">© 2025 Presentazione PCTO - Tutti i diritti riservati</span>
+    <span class="lang-en" style="display:none;">© 2025 PCTO Presentation - All rights reserved</span>
+  </div>
+  
+  <script>
+    const slideData = [
+      // 3° anno - Slide 1
+      {
+        image: "images/gif/mast.gif",
+        logo: "images/loghi/mast_logo.png",
+        it: ["3° anno: Esperienza collaborativa presso MAST", "La mia esperienza presso MAST, fondazione no-profit di Bologna, è stata incentrata sul lavoro di gruppo per la progettazione di prodotti commerciali. Ho imparato a collaborare efficacemente, condividendo idee e affrontando le sfide progettuali."],
+        en: ["3rd year: Collaborative Experience at MAST", "My experience at MAST, a Bologna-based non-profit foundation, focused on teamwork for designing commercial products. I learned to collaborate effectively, sharing ideas and facing design challenges."]
+      },
+      // 3° anno - Slide 2
+      {
+        image: "images/slides/foto2.jpg",
+        logo: "images/loghi/mast_logo.png",
+        it: ["3° anno: Sviluppo progetto packaging", [
+          "Analisi approfondita del brand e comprensione dei requisiti del cliente.",
+          "Ideazione collaborativa del concept grafico per il packaging, con focus sulla riconoscibilità e l'impatto visivo.",
+          "Identificazione e risoluzione di problematiche legate alla produzione e alla fattibilità tecnica.",
+          "Creazione di mockup e prototipi digitali attraverso un processo iterativo di feedback."
+        ]],
+        en: ["3rd year: Packaging Project Development", [
+          "In-depth brand analysis and understanding of client requirements.",
+          "Collaborative development of the graphic concept for packaging, focusing on recognition and visual impact.",
+          "Identification and resolution of issues related to production and technical feasibility.",
+          "Creation of mockups and digital prototypes through an iterative feedback process."
+        ]]
+      },
+      // 3° anno - Slide 3
+      {
+        image: "images/slides/foto3_small.jpg",
+        logo: "images/loghi/mast_logo.png",
+        it: ["3° anno: Competenze Sviluppate", [
+          "Utilizzo professionale di Adobe Illustrator per progetti di design complessi.",
+          "Collaborazione efficace in team su progetti a lungo termine con scadenze definite.",
+          "Gestione del feedback costruttivo e capacità di iterazione progettuale.",
+          "Risoluzione di problematiche tecniche legate alla stampa e alla produzione."
+        ]],
+        en: ["3rd year: Skills Developed", [
+          "Professional use of Adobe Illustrator for complex design projects.",
+          "Effective team collaboration on long-term projects with defined deadlines.",
+          "Management of constructive feedback and design iteration capabilities.",
+          "Resolution of technical issues related to printing and production."
+        ]]
+      },
+      // 4° anno - Slide 4 (Dublino - NUOVA)
+      {
+        image: "images/gif/dublino.gif",
+        logo: "images/loghi/ces_logo_new.png",
+        it: ["4° anno: Esperienza formativa a Dublino", "Durante il quarto anno, ho partecipato a una settimana di formazione intensiva a Dublino, dove ho seguito un corso di 10 ore con docenti madrelingua inglese. Questa esperienza mi ha permesso di migliorare significativamente le mie competenze linguistiche e di ottenere la certificazione CES (Centre of English Studies)."],
+        en: ["4th year: Educational Experience in Dublin", "During the fourth year, I participated in an intensive training week in Dublin, where I attended a 10-hour course with native English teachers. This experience allowed me to significantly improve my language skills and obtain the CES (Centre of English Studies) certification."]
+      },
+      // 4° anno - Slide 5
+      {
+        image: "images/gif/4wardpro_updated.gif",
+        logo: "images/loghi/4wardpro_logo.png",
+        it: ["4° anno: Stage presso 4wardPro ad Argelato", "Durante lo stage di un mese presso 4wardPro, ho lavorato su progetti di sviluppo software utilizzando C# e Visual Studio, sotto la guida del tutor Alessandro Nostini. L'esperienza mi ha permesso di applicare le mie conoscenze teoriche in un contesto aziendale reale, affrontando problematiche concrete."],
+        en: ["4th year: Internship at 4wardPro in Argelato", "During the one-month internship at 4wardPro, I worked on software development projects using C# and Visual Studio, under the guidance of tutor Alessandro Nostini. The experience allowed me to apply my theoretical knowledge in a real business context, addressing concrete problems."]
+      },
+      // 4° anno - Slide 6
+      {
+        image: "images/slides/foto5.jpg",
+        logo: "images/loghi/4wardpro_logo.png",
+        it: ["4° anno: Progetti e Database", [
+          "Approfondimento del linguaggio C# e dell'ambiente di sviluppo Visual Studio in contesto professionale.",
+          "Implementazione di connessioni a SQL Server e gestione efficiente dei dati con SQL Manager.",
+          "Risoluzione di bug e problemi di performance nelle applicazioni.",
+          "Sviluppo di applicazioni console e desktop con interfacce intuitive e funzionali."
+        ]],
+        en: ["4th year: Projects and Database", [
+          "In-depth study of C# language and Visual Studio development environment in a professional context.",
+          "Implementation of SQL Server connections and efficient data management with SQL Manager.",
+          "Resolution of bugs and performance issues in applications.",
+          "Development of console and desktop applications with intuitive and functional interfaces."
+        ]]
+      },
+      // 4° anno - Slide 7
+      {
+        image: "images/slides/foto6.jpg",
+        logo: "images/loghi/4wardpro_logo.png",
+        it: ["4° anno: Competenze Acquisite", [
+          "Programmazione orientata agli oggetti e sviluppo di applicazioni strutturate.",
+          "Gestione di database relazionali e implementazione di query SQL complesse.",
+          "Debugging e ottimizzazione del codice in ambiente di sviluppo professionale.",
+          "Collaborazione con team di sviluppo e comprensione dei flussi di lavoro aziendali."
+        ]],
+        en: ["4th year: Skills Acquired", [
+          "Object-oriented programming and development of structured applications.",
+          "Relational database management and implementation of complex SQL queries.",
+          "Debugging and code optimization in a professional development environment.",
+          "Collaboration with development teams and understanding of business workflows."
+        ]]
+      },
+      // 5° anno - Slide 8
+      {
+        image: "images/gif/errelle.gif",
+        logo: "images/loghi/errelle_logo.png",
+        it: ["5° anno: Esperienza presso Errelle", "Durante il PCTO presso Errelle, ho avuto l'opportunità di lavorare su progetti di grafica e comunicazione visiva. L'azienda, specializzata in soluzioni di stampa e design, mi ha permesso di applicare le competenze creative in un contesto professionale, seguendo progetti dalla fase di ideazione fino alla realizzazione finale."],
+        en: ["5th year: Experience at Errelle", "During the PCTO at Errelle, I had the opportunity to work on graphic and visual communication projects. The company, specialized in printing and design solutions, allowed me to apply creative skills in a professional context, following projects from the ideation phase to the final realization."]
+      },
+      // 5° anno - Slide 9
+      {
+        image: "images/slides/foto8.jpg",
+        logo: "images/loghi/errelle_logo.png",
+        it: ["5° anno: Progetti Grafici", [
+          "Creazione di materiali promozionali e brochure per clienti di diversi settori.",
+          "Sviluppo di identità visive coerenti e riconoscibili per brand emergenti.",
+          "Ottimizzazione di file per la stampa professionale e gestione del colore.",
+          "Collaborazione con il team creativo per la realizzazione di campagne integrate."
+        ]],
+        en: ["5th year: Graphic Projects", [
+          "Creation of promotional materials and brochures for clients from different sectors.",
+          "Development of coherent and recognizable visual identities for emerging brands.",
+          "Optimization of files for professional printing and color management.",
+          "Collaboration with the creative team for the implementation of integrated campaigns."
+        ]]
+      },
+      // 5° anno - Slide 10
+      {
+        image: "images/slides/foto9.jpg",
+        logo: "images/loghi/errelle_logo.png",
+        it: ["5° anno: Competenze Consolidate", [
+          "Utilizzo avanzato di Adobe Creative Suite (Photoshop, Illustrator, InDesign).",
+          "Gestione del flusso di lavoro creativo dalla concezione alla produzione.",
+          "Comprensione delle esigenze del cliente e capacità di tradurle in soluzioni visive efficaci.",
+          "Rispetto delle scadenze e gestione efficiente delle priorità in ambiente lavorativo."
+        ]],
+        en: ["5th year: Consolidated Skills", [
+          "Advanced use of Adobe Creative Suite (Photoshop, Illustrator, InDesign).",
+          "Management of the creative workflow from conception to production.",
+          "Understanding client needs and ability to translate them into effective visual solutions.",
+          "Meeting deadlines and efficient management of priorities in a work environment."
+        ]]
+      },
+      // Conclusioni - Slide 11
+      {
+        image: "images/slides/foto1_new.jpg",
+        it: ["Conclusioni e Competenze Trasversali", "Le esperienze PCTO mi hanno permesso di sviluppare competenze tecniche specifiche e capacità trasversali fondamentali per il mondo del lavoro. Ho imparato a lavorare in team, gestire progetti con scadenze, comunicare efficacemente e risolvere problemi in contesti reali. Queste esperienze hanno arricchito il mio percorso formativo e mi hanno aiutato a definire meglio i miei obiettivi professionali futuri."],
+        en: ["Conclusions and Transversal Skills", "The PCTO experiences allowed me to develop specific technical skills and fundamental transversal abilities for the working world. I learned to work in teams, manage projects with deadlines, communicate effectively, and solve problems in real contexts. These experiences have enriched my educational path and helped me better define my future professional goals."]
+      }
+    ];
+    
+    const container = document.getElementById("slides");
+    slideData.forEach((data, index) => {
+      const slide = document.createElement("div");
+      slide.className = "slide";
+      slide.id = `slide-${index}`;
+      
+      if (index === 0) {
+        slide.classList.add("active");
+      }
+      
+      const img = document.createElement("img");
+      img.src = data.image;
+      img.alt = data.it[0];
+      img.className = "slide-image";
+      
+      // Aggiunta del logo aziendale se presente
+      if (data.logo) {
+        const logo = document.createElement("img");
+        logo.src = data.logo;
+        logo.alt = "Logo aziendale";
+        logo.className = "company-logo";
+        slide.appendChild(logo);
+      }
+      
+      const title = document.createElement("h2");
+      title.innerHTML = `<span class="lang-it">${data.it[0]}</span><span class="lang-en" style="display:none;">${data.en[0]}</span>`;
+      
+      let content;
+      if (Array.isArray(data.it[1])) {
+        content = document.createElement("ul");
+        data.it[1].forEach((item, i) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<span class="lang-it">${item}</span><span class="lang-en" style="display:none;">${data.en[1][i]}</span>`;
+          content.appendChild(li);
+        });
+      } else {
+        content = document.createElement("p");
+        content.innerHTML = `<span class="lang-it">${data.it[1]}</span><span class="lang-en" style="display:none;">${data.en[1]}</span>`;
+      }
+      
+      slide.appendChild(img);
+      slide.appendChild(title);
+      slide.appendChild(content);
+      container.appendChild(slide);
+    });
+    
+    let slideIndex = 0;
+    updateDots();
+    
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+    
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+    
+    function showSlides(n) {
+      const slides = document.getElementsByClassName("slide");
+      
+      if (n >= slides.length) slideIndex = 0;
+      if (n < 0) slideIndex = slides.length - 1;
+      
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].classList.remove("active");
+      }
+      
+      slides[slideIndex].classList.add("active");
+      updateDots();
+    }
+    
+    function updateDots() {
+      const dotsContainer = document.getElementById("dots");
+      dotsContainer.innerHTML = "";
+      
+      const slides = document.getElementsByClassName("slide");
+      for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement("span");
+        dot.className = "dot" + (i === slideIndex ? " active-dot" : "");
+        dot.onclick = function() { currentSlide(i); };
+        dotsContainer.appendChild(dot);
+      }
+    }
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') plusSlides(-1);
+      if (e.key === 'ArrowRight') plusSlides(1);
+    });
+    
+    // Gestione lingua
+    document.getElementById("it-btn").addEventListener("click", () => {
+      document.querySelectorAll(".lang-it").forEach(e => e.style.display = "inline");
+      document.querySelectorAll(".lang-en").forEach(e => e.style.display = "none");
+      document.getElementById("it-btn").classList.add("active");
+      document.getElementById("en-btn").classList.remove("active");
+    });
+    
+    document.getElementById("en-btn").addEventListener("click", () => {
+      document.querySelectorAll(".lang-it").forEach(e => e.style.display = "none");
+      document.querySelectorAll(".lang-en").forEach(e => e.style.display = "inline");
+      document.getElementById("en-btn").classList.add("active");
+      document.getElementById("it-btn").classList.remove("active");
+    });
+    
+    // Swipe per dispositivi touch
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    document.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+    
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) {
+        plusSlides(1); // Swipe a sinistra, prossima slide
+      }
+      if (touchEndX > touchStartX + 50) {
+        plusSlides(-1); // Swipe a destra, slide precedente
+      }
+    }
+  </script>
+</body>
+</html>
